@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import napis from './img/memory.png'
+import brain from './img/brain.png'
 import './App.css';
+import First from './First'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="Napis">
+        <img height='100px' src={napis} alt="Memory"></img>
+      </div>
+      <div className="Brain">
+        <img id='b' height='100px' src={brain} alt="Brain"></img>
+      </div>
+      <First/>
+      <div className="Gra">
+        
+      </div>
+      <div className="Chat">
+        
+      </div>
     </div>
   );
 }
