@@ -20,23 +20,29 @@ body {
   background-color: rgba(255, 255, 255, 0.80);
   grid-area: 0 / 0 / 1 / 1;
   border: solid black 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20vh;
+  border-radius: 10px;
+  
 }
 
 .Chat {
   background-color: rgba(255, 255, 255, 0.80);
   grid-area: 0 / 1 / 1 / 2;
   border: solid black 4px;
+  border-radius: 10px;
 }
 
 .Napis {
   position: absolute;
-  left: 25vw;
+  left: 23vw;
   top: -10px
 }
-.Brain {
+.Hm {
   position: absolute;
-  left: -15px;
-  top: -10px
+  left: 50px;
 }
 
 #b {
@@ -71,5 +77,77 @@ body {
 #bf1 {
   margin-top: 5px;
   background-color: rgb(242, 160, 43);
-  color: black
+  color: black;
+}
+
+.letter {
+  background-color:white;
+  border: black 2px solid;
+  margin: 5px;
+  border-radius: 5px;
+  text-transform: capitalize;
+  color: white;
+  font-weight: bold;
+}
+
+.litera:hover {
+  filter: grayscale(100%)
+}
+
+.haslo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 25px;
+  width: 90%;
+  justify-content: space-between;
+}
+
+.kb {
+  border: dotted black 4px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 60%;
+  position: relative;
+  bottom: -3vh;
+}
+
+.closer {
+  font-size: 40px;
+  font-weight: bold;
+  position: absolute;
+  top: 15px;
+  right: 29vw;
+  cursor: pointer;
+}
+
+.zasady {
+  padding: 15px;
+  font-size: larger;
+  text-align: justify;
+  font-weight: bold;
+}
+
+.players {
+  display: flex;
+  flex-direction: column;
+}
+
+.player {
+  width: 90%;
+  border: solid black 3px;
+  border-radius: 10px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.75);
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.avatar {
+  width: 95px;
+  height: 95px;
+  background-color: yellow;
+  border: solid black 2px;
+  border-radius: 10px;
 }

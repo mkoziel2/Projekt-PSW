@@ -1,11 +1,11 @@
 import React from 'react';
 import { TextField, Button } from '@material-ui/core';
 
-const First = () => {
+const First = ({setStarted, started}) => {
     
     return (
-    <div className='first'>
-        <Button id='bf' variant="contained" color="primary">
+    <div style={ started ? {display: 'none'} : {display: 'block'}} className='first'>
+        <Button onClick={ () => { setStarted(true)} } id='bf' variant="contained" color="primary">
             START NEW GAME
         </Button>
         <h1>
