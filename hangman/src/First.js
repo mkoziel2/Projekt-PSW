@@ -16,7 +16,6 @@ const First = ({setCurrGame, currGame, setLobby, lobby, started, setYourId, setA
           setCurrGame(respond.data)
           setYourId(1)
           setAppId(respond.data.gameId)
-          
         } catch (error) {
           console.error(error);
         }
@@ -28,9 +27,13 @@ const First = ({setCurrGame, currGame, setLobby, lobby, started, setYourId, setA
         method: "get",
         url: `http://localhost:3210/join/${id}`
         });
-        setCurrGame(respond.data)
-        setYourId(respond.data.players.length)
-        setAppId(respond.data.gameId)
+        if (respond.data !== 'x') {
+            setCurrGame(respond.data)
+            setYourId(respond.data.players.length)
+            setAppId(respond.data.gameId)
+            setLobby(true)
+        };
+        
     } catch (error) {
         console.error(error);
     }
@@ -46,7 +49,7 @@ const First = ({setCurrGame, currGame, setLobby, lobby, started, setYourId, setA
         </h1>
         <div className='joiner'>
             <TextField onChange={(e) => {setInputId(e.target.value)}} id="if" label="Game ID" variant="outlined" />
-            <Button onClick={ () => { setLobby(true); joinRequest(inputId)} }id='bf1' variant="contained" color="primary">
+            <Button onClick={ () => {joinRequest(inputId)} }id='bf1' variant="contained" color="primary">
                 JOIN THE GAME
             </Button>
         </div>

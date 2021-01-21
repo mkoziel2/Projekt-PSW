@@ -4,5 +4,7 @@ export const default_game = {
     word: '',
     known_letters: [],
     curr_move: 1,
-    started: false
+    started: false,
+    winner: 'none',
+    finished: false
 };

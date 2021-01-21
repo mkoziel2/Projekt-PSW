@@ -23,6 +23,8 @@ const Chat = ({started, setStarted, players, yourId, game}) => {
                 return hm0
         }
     }
+
+    
     return (
     <div className='Chat'>
         <div className='zasady' style={ started ? {display: 'none'} : {display: 'block'}}>
@@ -30,7 +32,7 @@ const Chat = ({started, setStarted, players, yourId, game}) => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor m veniam, quis nostrud exelnulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </div>
         <div className='players' style={ started ? {display: 'flex', flexDirection: 'column'} : {display: 'none'}}>
-            {players.map(x => <div style={game.curr_move === x.id ? {border: '3px solid red'} : {border: '3px solid black'}} className='player'><h1 id='xxx'>{yourId === x.id ? '(YOU)' : ''}</h1><img onClick={() => {console.log(x.mistakes)}} src={avatar} alt='avt' className='avatar' ></img><div className='pinfo'><h2>Player {x.id } </h2></div><img src={mistake(x.mistakes)} alt='blad' className='blad'></img></div>)}
+            {players.map(x => <div style={game.curr_move === x.id ? {border: '3px solid red'} : {border: '3px solid black'}} className='player'><div style={x.loser !== true ? {left: '2550px'} : {}} className='Oczy'>X X</div><h1 id='xxx'>{yourId === x.id ? '(YOU)' : ''}</h1><img onClick={() => {console.log(x.mistakes)}} src={avatar} alt='avt' className='avatar' ></img><div className='pinfo'><h2>Player {x.id } </h2></div><img src={mistake(x.mistakes)} alt='blad' className='blad'></img></div>)}
         </div>
     </div>
     )
