@@ -13,17 +13,8 @@ const client = mqtt.connect('mqtt://localhost:8000/mqtt')
 
 
 function App() {
-  const Axios = require('axios')
-  async function nextMoveRequest(id) {
-    try {
-        let respond = await Axios({
-        method: "get",
-        url: `http://localhost:3210/game/${id}/nextmove`
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
+
+  
 
   const [lobby, setLobby] = useState(false)
   const [currGame, setCurrGame] = useState({...default_game, players: [{id: 1, mistakes: 0}]})
@@ -31,27 +22,50 @@ function App() {
   const [yourId, setYourId] = useState(1)
   const [started, setStarted] = useState(false)
   const [finished, setFinished] = useState(false)
+  const [yourChat, setYourChat] = useState([])
   
   
   useEffect(() => {
     if (appId !== null) {
       client.subscribe(`game${appId}`)
+      client.subscribe(`game${appId}/chat`)
     }
     client.on('message', (topic, message) => {
-      let x = JSON.parse(message);
-      setCurrGame(x);
-      if (x.finished === true) {
-        setFinished(true)
+      if (topic === `game${appId}`) {
+        let x = JSON.parse(message);
+        setCurrGame(x);
+        if (x.finished === true) {
+          setFinished(true)
+        }
+        
+        if (x.started === true) {
+          setLobby(false);
+          setStarted(true);
+          
+        }
+      } else {
+        if (topic === `game${appId}/chat`) {
+          let msg = JSON.parse(message);
+          handleChatChange(msg)
+        }
       }
       
-      if (x.started === true) {
-        setLobby(false);
-        setStarted(true);
-        
-      }
         
     })
   },[appId])
+
+  const handleChatChange = (msg) => {
+    console.log(msg, yourId)
+    let chat = yourChat.slice(-4);
+    
+
+    
+    if (msg.target === 0 || msg.target === yourId || msg.player === yourId) {
+      setYourChat(chat => [...chat, msg].slice(-5))
+      console.log(yourChat)
+    }
+    
+  }
 
 
 
@@ -63,10 +77,10 @@ function App() {
       <div className="Hm">
         <img height='150px' src={hm} alt="Hm"></img>
       </div>
-      <First setAppId={setAppId} setYourId={setYourId} setCurrGame={setCurrGame} currGame={currGame} setLobby={setLobby} lobby={lobby} started={started}/>
+      <First setStarted={setStarted} setAppId={setAppId} setYourId={setYourId} setCurrGame={setCurrGame} currGame={currGame} setLobby={setLobby} lobby={lobby} started={started}/>
       <Lobby yourId={yourId} game={currGame} setLobby={setLobby} setStarted={setStarted} lobby={lobby}/>
-      <Game setYourId={setYourId} setFinished={setFinished} finished={finished} yourId={yourId} id={currGame.gameId} game={currGame} setStarted={setStarted} setLobby={setLobby} lobby={lobby} started={started}/>
-      <Chat game={currGame} yourId={yourId} started={started} setLobby={setLobby} lobby={lobby} players={currGame.players}/>
+      <Game setYourChat={setYourChat} setYourId={setYourId} setFinished={setFinished} finished={finished} yourId={yourId} id={currGame.gameId} game={currGame} setStarted={setStarted} setLobby={setLobby} lobby={lobby} started={started}/>
+      <Chat chat={yourChat} game={currGame} yourId={yourId} started={started} setLobby={setLobby} lobby={lobby} players={currGame.players}/>
     </div>
   );
 }

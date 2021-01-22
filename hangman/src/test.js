@@ -6,5 +6,6 @@ export const default_game = {
     curr_move: 1,
     started: false,
     winner: 'none',
-    finished: false
+    finished: false,
+    audience: 0
 };

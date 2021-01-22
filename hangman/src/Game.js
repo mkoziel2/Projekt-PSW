@@ -3,7 +3,7 @@ import keyboard from './images'
 import Axios from 'axios';
 import { Button } from '@material-ui/core';
 
-const Game = ({setLobby, setYourId, setFinished, started, setStarted, game, id, yourId, finished}) => {
+const Game = ({setLobby, setYourId, setFinished, started, setStarted, game, id, yourId, finished, setYourChat}) => {
     const word_arr = game.word.split("")
     
     async function choiceRequest(x, p) {
@@ -20,7 +20,7 @@ const Game = ({setLobby, setYourId, setFinished, started, setStarted, game, id, 
     
     return (
     <div className='Gra'>
-        <div className='finisher' style={ finished ? {display: 'flex'} : {display: 'none'}}><h1>{ game.winner === 'none' ? "It's a draw!" : `Player ${game.winner} won!`}</h1><h1>The word was '{game.word}'!</h1><Button onClick={ () => {setStarted(false); setLobby(false); setFinished(false); setYourId(1)} } id='bf3' variant="contained" color="primary">Back to menu</Button></div>
+        <div className='finisher' style={ finished ? {display: 'flex'} : {display: 'none'}}><h1>{ game.winner === 'none' ? "It's a draw!" : `Player ${game.winner} won!`}</h1><h1>The word was '{game.word}'!</h1><Button onClick={ () => {setStarted(false); setLobby(false); setFinished(false); setYourId(1); setYourChat([])} } id='bf3' variant="contained" color="primary">Back to menu</Button></div>
         <div style={ started ? {display: 'flex'} : {display: 'none'}} className='haslo'>
             {word_arr.map(x => <div style={word_arr.length > 15 ? {width: '35px', height: '35px', fontSize: '30px'} : {width: '50px', height: '50px', fontSize: '40px'}} className={`letter`} >{game.known_letters.includes(x) ? x : ' '}</div>) }
         </div>

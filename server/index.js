@@ -44,15 +44,27 @@ app.get('/game', (req, res) => {
 app.get('/join/:id', (req, res) => {
     console.log('Dolaczenie do istniejacej gry')
     let g = 'x';
+    let full = false;
     games = games.reduce((a,b) => {
         if (b.gameId === req.params.id) {
-            b.players = [...b.players, {id: b.players.length + 1, mistakes: 0, loser: false}];
+            if (b.players.length !== 3 && b.started !== true) {
+                b.players = [...b.players, {id: b.players.length + 1, mistakes: 0, loser: false}];
+            } else {
+                full = true
+            }
             g = b;
         }
         return [...a, b]
     },[])
-    client.publish(`game${g.gameId}`, JSON.stringify(g))
-    res.send(g)
+    if (!full) {
+        client.publish(`game${g.gameId}`, JSON.stringify(g))
+        res.send(g)
+    } else {
+        res.send('x')
+    }
+    
+    
+    
 })
 
 app.get('/start/:id', (req, res) => {
@@ -118,5 +130,31 @@ app.post('/game/:id/choice', (req, res) => {
     console.log(g)
     client.publish(`game${g.gameId}`, JSON.stringify(g))
     res.send(g)
+})
+
+app.post('/game/:id/chat', (req, res) => {
+    console.log(req.body.text)
+    let priv = false;
+    let target = 0
+    if (req.body.text.startsWith('/pw')) {
+        priv = true;
+        target = Number(req.body.text[4])
+        console.log(target)
+    }
+    let game = games.find(x => x.gameId === req.params.id)
+    let pls = [0];
+    game.players.forEach(x => pls = [...pls, x.id])
+    
+    let player = req.body.player
+    if (target !== player && pls.includes(target) ) {
+        
+        if (priv) {
+            client.publish(`game${req.params.id}/chat`, JSON.stringify({target: target, player: player, text: req.body.text.slice(6,31)}))
+        } else {
+            client.publish(`game${req.params.id}/chat`, JSON.stringify({target: target, player: player, text: req.body.text.slice(0,25)}))
+        }
+    }
+    res.send('x')
+    
 })
 

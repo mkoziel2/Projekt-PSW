@@ -3,7 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import Axios from 'axios';
 import { useState } from 'react'
 
-const First = ({setCurrGame, currGame, setLobby, lobby, started, setYourId, setAppId}) => {
+const First = ({setStarted, setCurrGame, currGame, setLobby, lobby, started, setYourId, setAppId}) => {
     
     const [inputId, setInputId] = useState(0)
 
