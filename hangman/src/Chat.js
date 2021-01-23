@@ -3,7 +3,8 @@ import hm0 from './img/hm0.png'
 import hm1 from './img/hm1.png'
 import hm2 from './img/hm2.png'
 import hm3 from './img/hm3.png'
-import { Button, TextField } from '@material-ui/core';
+import resB from './img/res.jpg'
+import { Button, ServerStyleSheets, TextField } from '@material-ui/core';
 import { useState } from 'react';
 import Axios from 'axios';
 
@@ -23,6 +24,18 @@ const Chat = ({chat, started, setStarted, players, yourId, game}) => {
           console.error(error);
         }
       }
+
+    async function resReq(id) {
+    try {
+        let respond = await Axios({
+        method: "post",
+        url: `http://localhost:3210/game/${game.gameId}/changeMove`,
+        data: {player: id}
+        });
+    } catch (error) {
+        console.error(error);
+    }
+    }
     
     const mistake = (x) => {
         switch (x) {
@@ -76,7 +89,7 @@ const Chat = ({chat, started, setStarted, players, yourId, game}) => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor m veniam, quis nostrud exelnulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </div>
         <div className='players' style={ started ? {display: 'flex', flexDirection: 'column'} : {display: 'none'}}>
-            {players.map(x => <div style={game.curr_move === x.id ? {border: '3px solid red'} : {border: '3px solid black'}} className='player'><div style={x.loser !== true ? {left: '2550px'} : {}} className='Oczy'>X X</div><h1 id='xxx'>{yourId === x.id ? '(YOU)' : ''}</h1><img onClick={() => {console.log(x.mistakes)}} src={avatar} alt='avt' className='avatar' ></img><div className='pinfo'><h2>Player {x.id } </h2></div><img src={mistake(x.mistakes)} alt='blad' className='blad'></img></div>)}
+            {players.map(x => <div style={game.curr_move === x.id ? {border: '3px solid red'} : {border: '3px solid black'}} className='player'><div style={x.mistakes !== 3 ? {left: '2550px'} : {}} className='Oczy'>X X</div><img onClick={() => { resReq(x.id)}} src={resB} alt='resB' className='resButton' style={ game.lastMove.player === yourId && game.lastMove.isGood === false && x.id === yourId && game.votes.every(x => x === false) ? {display: 'inline'} : {display: 'none'}}></img><h1 id='xxx'>{yourId === x.id ? '(YOU)' : ''}</h1><img onClick={() => {console.log(x.mistakes)}} src={avatar} alt='avt' className='avatar' ></img><div className='pinfo'><h2>Player {x.id } </h2></div><img src={mistake(x.mistakes)} alt='blad' className='blad'></img></div>)}
         </div>
         <div style={ started ? chatMargin('flex') : chatMargin('none')} className='Messenger' >
             <div className='msgs'>

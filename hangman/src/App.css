@@ -160,6 +160,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 5px;
+  position: relative;
 }
 
 .avatar {
@@ -265,4 +266,16 @@ body {
   padding: 5px;
   font-size: 15px;
   overflow-wrap: break-word;
+}
+
+.resButton {
+  width: 50px;
+  position: absolute;
+  left: -25px;
+  bottom: 30px;
+  z-index: 1000;
+}
+
+.resButton:hover {
+  filter: grayscale(100%);
 }

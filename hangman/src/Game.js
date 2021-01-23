@@ -27,7 +27,7 @@ const Game = ({setLobby, setYourId, setFinished, started, setStarted, game, id, 
         <div className='kb' style={ started && !finished ? {display: 'block'} : {display: 'none'}}>
             {keyboard.map(x => <img style={ game.known_letters.includes(x.letter) ? {filter: 'grayscale(100%)'} : {}} onClick={() => { game.curr_move === yourId && game.players[yourId - 1].loser === false ? choiceRequest(x.letter, yourId) : console.log('Nie Twój ruch')}} className='litera' height='80px' src={x.name} alt='litera'></img>)}
         </div>
-        <div className='closer' onClick={() => { setStarted(false) }} style={ started ? {display: 'block'} : {display: 'none'}}>
+        <div className='closer' onClick={() => { console.log(game) }} style={ started ? {display: 'block'} : {display: 'none'}}>
             X
         </div>
     </div>

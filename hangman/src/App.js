@@ -25,12 +25,15 @@ function App() {
   const [yourChat, setYourChat] = useState([])
   
   
+  
   useEffect(() => {
     if (appId !== null) {
       client.subscribe(`game${appId}`)
       client.subscribe(`game${appId}/chat`)
     }
     client.on('message', (topic, message) => {
+      console.log(JSON.parse(message))
+      
       if (topic === `game${appId}`) {
         let x = JSON.parse(message);
         setCurrGame(x);
