@@ -3,7 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import Axios from 'axios';
 import { useState } from 'react'
 
-const First = ({setStarted, setCurrGame, currGame, setLobby, lobby, started, setYourId, setAppId}) => {
+const First = ({setAudienceId, setStarted, setCurrGame, currGame, setLobby, lobby, started, setYourId, setAppId}) => {
     
     const [inputId, setInputId] = useState(0)
 
@@ -29,9 +29,16 @@ const First = ({setStarted, setCurrGame, currGame, setLobby, lobby, started, set
         });
         if (respond.data !== 'x') {
             setCurrGame(respond.data)
-            setYourId(respond.data.players.length)
             setAppId(respond.data.gameId)
             setLobby(true)
+            if (respond.data.audience > 0) {
+                setLobby(false);
+                setStarted(true);
+                setYourId(-1);
+                setAudienceId(respond.data.audience)
+            } else {
+                setYourId(respond.data.players.length)
+            }
         };
         
     } catch (error) {

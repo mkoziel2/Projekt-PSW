@@ -9,5 +9,6 @@ export const default_game = {
     finished: false,
     audience: 0,
     lastMove: {isGood: true, player: 0},
-    votes: [false]
+    votes: [false],
+    audience: 0
 };

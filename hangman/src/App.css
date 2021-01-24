@@ -139,10 +139,23 @@ body {
 }
 
 .zasady {
-  padding: 15px;
-  font-size: larger;
+  flex-direction: column;
   text-align: justify;
   font-weight: bold;
+  justify-content: center;
+  width: 290px;
+}
+
+.hzas {
+  text-align: center;
+}
+
+.tekst {
+  overflow-wrap:break-word;
+  text-align: justify;
+  padding-left: 6px;
+  font-size: larger;
+  font-weight: normal;
 }
 
 .players {

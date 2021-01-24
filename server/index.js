@@ -31,9 +31,8 @@ const idAndWord = () => {
 games = [];
 
 app.get('/game', (req, res) => {
-    console.log('Stworzenie nowej gry')
     let obj = idAndWord()
-    let game = {votes: [false], lastMove: {isGood: true, player: 0}, known_letters: [], curr_move: 1, started: false, players: [{id: 1, mistakes: 0, loser: false}], gameId: obj.id, word: obj.word, finished: false, winner: 'none'}
+    let game = {audience: 0, votes: [false], lastMove: {isGood: true, player: 0}, known_letters: [], curr_move: 1, started: false, players: [{id: 1, mistakes: 0, loser: false}], gameId: obj.id, word: obj.word, finished: false, winner: 'none'}
     let str = JSON.stringify(game)
     games = [...games, game]
     console.log(game)
@@ -42,11 +41,13 @@ app.get('/game', (req, res) => {
 
 
 app.get('/join/:id', (req, res) => {
-    console.log('Dolaczenie do istniejacej gry')
     let g = 'x';
     let full = false;
     games = games.reduce((a,b) => {
         if (b.gameId === req.params.id) {
+            if (b.started === true) {
+                b.audience += 1
+            }
             if (b.players.length !== 3 && b.started !== true) {
                 b.players = [...b.players, {id: b.players.length + 1, mistakes: 0, loser: false}];
                 b.votes = [...b.votes, false]
@@ -57,7 +58,7 @@ app.get('/join/:id', (req, res) => {
         }
         return [...a, b]
     },[])
-    if (!full) {
+    if (!full || g.audience > 0) {
         client.publish(`game${g.gameId}`, JSON.stringify(g))
         res.send(g)
     } else {
@@ -69,8 +70,6 @@ app.get('/join/:id', (req, res) => {
 })
 
 app.get('/start/:id', (req, res) => {
-    console.log(games)
-    console.log('started', req.params.id)
     let g;
     games = games.reduce((a,b) => {
         if (b.gameId === req.params.id) {
@@ -79,7 +78,6 @@ app.get('/start/:id', (req, res) => {
         }
         return [...a, b]
     },[])
-    console.log(g.started)
     client.publish(`game${g.gameId}`, JSON.stringify(g))
     res.send(g)
 })
@@ -131,14 +129,13 @@ app.post('/game/:id/choice', (req, res) => {
         }
         return [...a, b]
     },[])
-    console.log('choice', req.body.letter, 'in', g.word)
     console.log(g)
     client.publish(`game${g.gameId}`, JSON.stringify(g))
     res.send(g)
 })
 
 app.post('/game/:id/chat', (req, res) => {
-    if (req.body.text.startsWith('/yes')) {
+    if (req.body.text.startsWith('/yes') && req.body.audience === false) {
         games = games.reduce((a,b) => {
             if (b.gameId === req.params.id) {
                 b.votes[req.body.player - 1] = true
@@ -160,10 +157,9 @@ app.post('/game/:id/chat', (req, res) => {
         console.log(req.body.text)
         let priv = false;
         let target = 0
-        if (req.body.text.startsWith('/pw')) {
+        if (req.body.text.startsWith('/pw') && req.body.audience === false) {
             priv = true;
             target = Number(req.body.text[4])
-            console.log(target)
         }
         let game = games.find(x => x.gameId === req.params.id)
         let pls = [0];
@@ -173,9 +169,9 @@ app.post('/game/:id/chat', (req, res) => {
         if (target !== player && pls.includes(target) ) {
             
             if (priv) {
-                client.publish(`game${req.params.id}/chat`, JSON.stringify({target: target, player: player, text: req.body.text.slice(6,31)}))
+                client.publish(`game${req.params.id}/chat`, JSON.stringify({target: target, player: player, text: req.body.text.slice(6,31), isAud: req.body.audience}))
             } else {
-                client.publish(`game${req.params.id}/chat`, JSON.stringify({target: target, player: player, text: req.body.text.slice(0,25)}))
+                client.publish(`game${req.params.id}/chat`, JSON.stringify({target: target, player: player, text: req.body.text.slice(0,25), isAud: req.body.audience}))
             }
         }
     }

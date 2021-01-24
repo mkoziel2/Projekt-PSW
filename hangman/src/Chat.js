@@ -9,16 +9,22 @@ import { useState } from 'react';
 import Axios from 'axios';
 
 import avatar from './img/avatar.jpg'
-const Chat = ({chat, started, setStarted, players, yourId, game}) => {
+const Chat = ({audienceId, chat, started, setStarted, players, yourId, game}) => {
 
     const [input, setInput] = useState('')
 
     async function sendReq(str) {
+        let pid = yourId;
+        let isAud = false;
+        if (yourId === -1) {
+            pid = audienceId;
+            isAud = true;
+        }
         try {
             await Axios({
             method: "post",
             url: `http://localhost:3210/game/${game.gameId}/chat`,
-            data: { player: yourId, text: str}
+            data: { player: pid, text: str, audience: isAud}
           });
         } catch (error) {
           console.error(error);
@@ -69,7 +75,12 @@ const Chat = ({chat, started, setStarted, players, yourId, game}) => {
 
     const msgGen = (msg) => {
         if (msg.target === 0) {
-            return `*ALL* P${msg.player}: ${msg.text}`
+            if (msg.isAud) {
+                return `*ALL* A${msg.player}: ${msg.text}`
+            } else {
+                return `*ALL* P${msg.player}: ${msg.text}`
+            }
+            
         } else {
             if (msg.target === yourId) {
                 return `*PW* P${msg.player}: ${msg.text}`
@@ -78,22 +89,34 @@ const Chat = ({chat, started, setStarted, players, yourId, game}) => {
             }
             
         }
-                
-            
+    }
+
+    const visibleMsg = () => {
+        let tmp = [];
+        chat.forEach(x => {
+            if (audienceId !== 0 && x.target === 0) {
+                tmp = [...tmp, x]
+            } else {
+                if ( x.target === 0 || x.target === yourId || x.player === yourId) {
+                    tmp = [...tmp, x]
+                }
+            }
+        })
+        return tmp.slice(-5);
     }
     
     return (
     <div className='Chat'>
-        <div className='zasady' style={ started ? {display: 'none'} : {display: 'block'}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor m veniam, quis nostrud exelnulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <div className='zasady' style={ started ? {display: 'none'} : {display: 'flex'}}>
+             <h1 className='hzas' style={{fontWeight: 'bold'}}>ZASADY GRY</h1>
+             <div className='tekst'>Welcome to Hangman! You have to guess which word is hidden behind the white tiles. You start your turn choosing which letter you want to guess. If you're right you have one more chance and so on. Otherwise your amount of mistakes increace. You have 3 mistakes until you die. You can ask your playmates, if you can change your turn (every player has to type <b>/yes</b> on the chat to actually change it). If you want to type a private message you can type <b>/pw #playernumberhere#</b> and then your message. The winner is the one who guesses the last letter. </div>
         </div>
         <div className='players' style={ started ? {display: 'flex', flexDirection: 'column'} : {display: 'none'}}>
             {players.map(x => <div style={game.curr_move === x.id ? {border: '3px solid red'} : {border: '3px solid black'}} className='player'><div style={x.mistakes !== 3 ? {left: '2550px'} : {}} className='Oczy'>X X</div><img onClick={() => { resReq(x.id)}} src={resB} alt='resB' className='resButton' style={ game.lastMove.player === yourId && game.lastMove.isGood === false && x.id === yourId && game.votes.every(x => x === false) ? {display: 'inline'} : {display: 'none'}}></img><h1 id='xxx'>{yourId === x.id ? '(YOU)' : ''}</h1><img onClick={() => {console.log(x.mistakes)}} src={avatar} alt='avt' className='avatar' ></img><div className='pinfo'><h2>Player {x.id } </h2></div><img src={mistake(x.mistakes)} alt='blad' className='blad'></img></div>)}
         </div>
         <div style={ started ? chatMargin('flex') : chatMargin('none')} className='Messenger' >
             <div className='msgs'>
-                {chat.map(x => <div className='msg' style={ yourId === x.player ? {alignSelf: 'flex-end', backgroundColor: 'darkslategray'} : {} }>{msgGen(x)}</div>)}
+                {visibleMsg().map(x => <div className='msg' style={ (yourId === x.player && x.isAud === false) || (x.isAud === true && audienceId === x.player) ? {alignSelf: 'flex-end', backgroundColor: 'darkslategray'} : {} }>{msgGen(x)}</div>)}
             </div>
             <div>
                 <input onChange={(e) => { setInput(e.target.value)}} onKeyDown={(e) => {if (e.key === 'Enter') {sendReq(input); e.target.value = ''}}} id="textf" placeholder='Send a message'></input>
