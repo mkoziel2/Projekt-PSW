@@ -8,7 +8,7 @@ const Game = ({setLobby, setYourId, setFinished, started, setStarted, game, id, 
     
     async function choiceRequest(x, p) {
         try {
-            let respond = await Axios({
+            await Axios({
             method: "post",
             url: `http://localhost:3210/game/${id}/choice`,
             data: { letter: x, player: p }
@@ -25,7 +25,7 @@ const Game = ({setLobby, setYourId, setFinished, started, setStarted, game, id, 
             {word_arr.map(x => <div style={word_arr.length > 15 ? {width: '35px', height: '35px', fontSize: '30px'} : {width: '50px', height: '50px', fontSize: '40px'}} className={`letter`} >{game.known_letters.includes(x) ? x : ' '}</div>) }
         </div>
         <div className='kb' style={ started && !finished ? {display: 'block'} : {display: 'none'}}>
-            {keyboard.map(x => <img style={ game.known_letters.includes(x.letter) ? {filter: 'grayscale(100%)'} : {}} onClick={() => { game.curr_move === yourId && game.players[yourId - 1].loser === false ? choiceRequest(x.letter, yourId) : console.log('Nie Twój ruch')}} className='litera' height='80px' src={x.name} alt='litera'></img>)}
+            {keyboard.map(x => <img style={ game.known_letters.includes(x.letter) ? {filter: 'grayscale(100%)'} : {}} onClick={() => { game.curr_move === yourId && game.players[yourId - 1].mistakes !== 3 ? choiceRequest(x.letter, yourId) : console.log('Nie Twój ruch')}} className='litera' height='80px' src={x.name} alt='litera'></img>)}
         </div>
         <div className='closer' onClick={() => { console.log(game) }} style={ started ? {display: 'block'} : {display: 'none'}}>
             X

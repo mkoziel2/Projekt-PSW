@@ -4,7 +4,7 @@ import hm1 from './img/hm1.png'
 import hm2 from './img/hm2.png'
 import hm3 from './img/hm3.png'
 import resB from './img/res.jpg'
-import { Button, ServerStyleSheets, TextField } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { useState } from 'react';
 import Axios from 'axios';
 
@@ -15,7 +15,7 @@ const Chat = ({chat, started, setStarted, players, yourId, game}) => {
 
     async function sendReq(str) {
         try {
-            let respond = await Axios({
+            await Axios({
             method: "post",
             url: `http://localhost:3210/game/${game.gameId}/chat`,
             data: { player: yourId, text: str}
@@ -27,7 +27,7 @@ const Chat = ({chat, started, setStarted, players, yourId, game}) => {
 
     async function resReq(id) {
     try {
-        let respond = await Axios({
+        await Axios({
         method: "post",
         url: `http://localhost:3210/game/${game.gameId}/changeMove`,
         data: {player: id}
