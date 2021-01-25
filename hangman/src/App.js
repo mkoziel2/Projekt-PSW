@@ -1,4 +1,3 @@
-import napis from './img/hangman.png'
 import hm from './img/hm.png'
 import './App.css';
 import First from './First'
@@ -27,7 +26,6 @@ function App() {
   
   
   const handleChatChange = (msg) => {
-    let chat = yourChat;
     setYourChat(chat => [...chat, msg])
   }
   
@@ -66,9 +64,6 @@ function App() {
 
   return (
     <div className="App">
-      <div className="Napis">
-        <img height='100px' src={napis} alt="Hangman"></img>
-      </div>
       <div className="Hm">
         <img height='150px' src={hm} alt="Hm"></img>
       </div>

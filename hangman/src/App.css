@@ -4,10 +4,11 @@ body {
   text-align: center;
   display: flex;
   justify-content: center;
+  width: 1520px
 }
 
 .App {
-  width: 1600px;
+  width: 1520px;
   max-width: 1600px;
   height: 92vh;
   margin-top: 20px;
@@ -15,6 +16,7 @@ body {
   grid-template-columns: 1144px 299px;
   grid-gap: 5px;
   justify-content: center;
+  position: relative;
 }
 
 .Gra {
@@ -28,6 +30,7 @@ body {
   border-radius: 10px;
   width: 1144px;
   max-width: 1144px;
+  position: relative;
 }
 
 .Chat {
@@ -43,8 +46,8 @@ body {
 
 .Napis {
   position: absolute;
-  left: 25vw;
-  top: -10px
+  left: 355px;
+  top: -30px
 }
 .Hm {
   position: absolute;
@@ -61,11 +64,12 @@ body {
   width: 400px;
   height: 285px;
   background-color: rgba(255, 255, 255, 0.5);
-  left: 27vw;
+  left: 410px;
   top: 25vh;
   border: solid black 4px;
   border-radius: 20px;
   box-shadow: 3px 3px 3px 3px rgb(82, 82, 82);
+  z-index: 1500;
 }
 
 .lobby {
@@ -73,11 +77,12 @@ body {
   width: 400px;
   height: 285px;
   background-color: rgba(255, 255, 255, 0.5);
-  left: 27vw;
+  left: 410px;
   top: 25vh;
   border: solid black 4px;
   border-radius: 20px;
   box-shadow: 3px 3px 3px 3px rgb(82, 82, 82);
+  z-index: 1500;
 }
 
 #bf {
@@ -224,7 +229,7 @@ body {
   width: 400px;
   height: 285px;
   background-color: rgb(255, 255, 255);
-  left: 27vw;
+  left: 370px;
   top: 25vh;
   border: solid black 4px;
   border-radius: 20px;
@@ -232,6 +237,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 1500;
 }
 
 #bf3 {
@@ -295,6 +301,6 @@ body {
 
 .aud {
   position: absolute;
-  left: 70px;
-  bottom: 20px;
+  left: 30px;
+  bottom: 5px;
 }

@@ -17,7 +17,7 @@ const Lobby = ({game, setLobby, setStarted, lobby, yourId}) => {
 
     async function startTheGame(id) {
         try {
-            let respond = await Axios({
+            await Axios({
             method: "get",
             url: `http://localhost:3210/start/${id}`
           });
