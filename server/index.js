@@ -1,5 +1,3 @@
-
-const { Console } = require('console');
 const express = require('express');
 const mqtt = require('mqtt');
 cors = require('cors');
@@ -17,7 +15,6 @@ const client = mqtt.connect('mqtt://localhost:1883');
 
 const idAndWord = () => {
     let id = Math.random().toString(36).substr(2, 9);
-
     let lines = [];
     require('fs').readFileSync('../hangman/src/words.txt', 'utf-8').split(/\r?\n/).forEach(function(line) {
         lines.push(line);
@@ -25,8 +22,6 @@ const idAndWord = () => {
     let word = lines[Math.round(Math.random() * 99)]
     return {id: id, word: word}
 }
-
-
 
 games = [];
 
@@ -129,7 +124,6 @@ app.post('/game/:id/choice', (req, res) => {
         }
         return [...a, b]
     },[])
-    console.log(g)
     client.publish(`game${g.gameId}`, JSON.stringify(g))
     res.send(g)
 })
@@ -154,7 +148,6 @@ app.post('/game/:id/chat', (req, res) => {
             return [...a, b]
         },[])
     } else {
-        console.log(req.body.text)
         let priv = false;
         let target = 0
         if (req.body.text.startsWith('/pw') && req.body.audience === false) {
@@ -183,7 +176,7 @@ app.post('/game/:id/changeMove', (req, res) => {
     games = games.reduce((a,b) => {
         if (b.gameId === req.params.id) {
             b.votes[req.body.player - 1] = true
-            client.publish(`game${req.params.id}/chat`, JSON.stringify({target: 0, player: req.body.player, text: 'Chcę zmienić ruch!'}))
+            client.publish(`game${req.params.id}/chat`, JSON.stringify({target: 0, player: req.body.player, text: 'I want to change my turn!'}))
             client.publish(`game${b.gameId}`, JSON.stringify(b))
         }
         return [...a, b]

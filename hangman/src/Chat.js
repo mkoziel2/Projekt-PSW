@@ -7,9 +7,9 @@ import resB from './img/res.jpg'
 import { Button } from '@material-ui/core';
 import { useState } from 'react';
 import Axios from 'axios';
-
 import avatar from './img/avatar.jpg'
-const Chat = ({audienceId, chat, started, setStarted, players, yourId, game}) => {
+
+const Chat = ({audienceId, chat, started, players, yourId, game}) => {
 
     const [input, setInput] = useState('')
 
@@ -83,9 +83,9 @@ const Chat = ({audienceId, chat, started, setStarted, players, yourId, game}) =>
             
         } else {
             if (msg.target === yourId) {
-                return `*PW* P${msg.player}: ${msg.text}`
+                return `*PV* P${msg.player}: ${msg.text}`
             } else {
-                return `*PW(${msg.target})* P${msg.player}: ${msg.text}`
+                return `*PV(${msg.target})* P${msg.player}: ${msg.text}`
             }
             
         }
@@ -108,8 +108,8 @@ const Chat = ({audienceId, chat, started, setStarted, players, yourId, game}) =>
     return (
     <div className='Chat'>
         <div className='zasady' style={ started ? {display: 'none'} : {display: 'flex'}}>
-             <h1 className='hzas' style={{fontWeight: 'bold'}}>ZASADY GRY</h1>
-             <div className='tekst'>Welcome to Hangman! You have to guess which word is hidden behind the white tiles. You start your turn choosing which letter you want to guess. If you're right you have one more chance and so on. Otherwise your amount of mistakes increace. You have 3 mistakes until you die. You can ask your playmates, if you can change your turn (every player has to type <b>/yes</b> on the chat to actually change it). If you want to type a private message you can type <b>/pw #playernumberhere#</b> and then your message. The winner is the one who guesses the last letter. </div>
+             <h1 className='hzas' style={{fontWeight: 'bold'}}>GAME RULES</h1>
+             <div className='tekst'>Welcome to Hangman Game! You have to guess which word is hidden behind the white tiles. You start your turn choosing which letter you want to guess. If you're right you have one more chance and so on. Otherwise your amount of mistakes increace. You have 3 mistakes until you die. You can ask your playmates, if you can change your turn (every player has to type <b>/yes</b> on the chat to actually change it). If you want to type a private message you can type <b>/pw #playernumberhere#</b> and then your message. The winner is the one who guesses the last letter. </div>
         </div>
         <div className='players' style={ started ? {display: 'flex', flexDirection: 'column'} : {display: 'none'}}>
             {players.map(x => <div style={game.curr_move === x.id ? {border: '3px solid red'} : {border: '3px solid black'}} className='player'><div style={x.mistakes !== 3 ? {left: '2550px'} : {}} className='Oczy'>X X</div><img onClick={() => { resReq(x.id)}} src={resB} alt='resB' className='resButton' style={ game.lastMove.player === yourId && game.lastMove.isGood === false && x.id === yourId && game.votes.every(x => x === false) ? {display: 'inline'} : {display: 'none'}}></img><h1 id='xxx'>{yourId === x.id ? '(YOU)' : ''}</h1><img onClick={() => {console.log(x.mistakes)}} src={avatar} alt='avt' className='avatar' ></img><div className='pinfo'><h2>Player {x.id } </h2></div><img src={mistake(x.mistakes)} alt='blad' className='blad'></img></div>)}

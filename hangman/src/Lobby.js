@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import Axios from 'axios';
 
 const Lobby = ({game, setLobby, setStarted, lobby, yourId}) => {
-  function CopyToClipboard (str) {
+  const CopyToClipboard = (str) => {
     let el = document.createElement('textarea');
     el.value = str;
     el.setAttribute('readonly', '');

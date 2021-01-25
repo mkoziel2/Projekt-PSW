@@ -292,3 +292,9 @@ body {
 .resButton:hover {
   filter: grayscale(100%);
 }
+
+.aud {
+  position: absolute;
+  left: 70px;
+  bottom: 20px;
+}
